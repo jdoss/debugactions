@@ -1,0 +1,38 @@
+name: Comment on PR
+
+on:
+  pull_request_target:
+
+jobs:
+  context_dump:
+    name: My context dump
+    runs-on: [ubuntu-latest]
+    steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+        
+      - name: Dump github.event.pull_request.head.repo.full_name
+        env:
+          GITHUB_EVENT_PULL_REQUEST: ${{ toJson(github.event.pull_request) }}
+        run: echo "$GITHUB_EVENT_PULL_REQUEST"
+
+  pull_request_comment:
+    name: Comment on PR if coming from a forked repository
+    # if: github.repository != 'forem/forem'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add comment to PR if coming from third-party fork
+        uses: mshick/add-pr-comment@v1
+        with:
+          message: |
+            Thank you for opening this PR! We appreciate you!
+
+            For all pull requests coming from third-party forks we will need to
+            review the PR before we can process it through our CI pipelines.
+
+            A Forem Team member will review this contribution and get back to
+            you as soon as possible!
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          repo-token-user-login: 'github-actions[bot]'
