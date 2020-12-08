@@ -6,13 +6,15 @@ on:
 jobs:
  job01:
     name: My comment checker
-    if: github.event.issue.pull_request && contains(github.event.comment.body, '/commenttest') && (github.event.comment.author_association == 'MEMBER' || github.event.comment.author_association == 'OWNER')
+    if: github.event.issue.pull_request && contains(github.event.comment.body, '/commentcheck') && (github.event.comment.author_association == 'MEMBER' || github.event.comment.author_association == 'OWNER')
     runs-on: [ubuntu-latest]
     steps:
       - name: Dump GitHub context
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
-      - name: Get github.repository
-        run: |
-          echo ${{ github.repository }}
+        
+      - name: Dump github.event.pull_request.head.repo.full_name
+        env:
+          GITHUB_EVENT_PULL_REQUEST: ${{ toJson(github.event.pull_request) }}
+        run: echo "$GITHUB_EVENT_PULL_REQUEST"
