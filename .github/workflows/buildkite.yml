@@ -48,7 +48,7 @@ jobs:
       - name: Dump .issue.number with jq from GITHUB_EVENT_PATH
         run: jq -r .issue.number "${GITHUB_EVENT_PATH}"
       - name: Dump .issue.number with jq from GITHUB_CONTEXT
-        run: jq -r .event.issue.number "${GITHUB_CONTEXT}"
+        run: echo "${GITHUB_CONTEXT}" | jq -r .event.issue.number 
       - name: Dump .comment.user.login from GITHUB_EVENT_PATH
         run: jq -r .comment.user.login "${GITHUB_EVENT_PATH}"
       - name: Dump .issue.comments_url from GITHUB_EVENT_PATH
